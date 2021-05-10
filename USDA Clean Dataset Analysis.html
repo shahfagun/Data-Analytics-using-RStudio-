@@ -1,0 +1,316 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html><head></head><body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div style="visibility: hidden;overflow: hidden;position: absolute;top: 0px;height: 1px;width: auto;padding: 0px;border: 0px;margin: 0px;text-align: left;text-indent: 0px;text-transform: none;line-height: normal;letter-spacing: normal;word-spacing: normal;"><div></div></div><div style="display: none;"></div>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="fluid-row">
+
+
+
+<h1 class="title toc-ignore">CMTH 642 Data Analytics: Advanced Methods</h1>
+
+</div>
+
+
+<center>
+<h1>
+Assignment 2 (10%)
+</h1>
+</center>
+<center>
+<h3>
+FAGUN SHAH
+</h3>
+</center>
+<center>
+<h3>
+501066618
+</h3>
+</center>
+<hr/>
+<div class="section level4">
+<h4>1. Read the csv file (USDA_Clean.csv) in the folder and assign it to a data frame. (3 points)</h4>
+<pre class="r"><code class="hljs">Usda&lt;- read.csv(<span class="hljs-string">&quot;USDA_Clean.csv&quot;</span>)</code></pre>
+</div>
+<div class="section level4">
+<h4>2. Check the datatypes of the attributes. (3 points)</h4>
+<pre class="r"><code class="hljs">str(Usda)</code></pre>
+<pre><code class="hljs">## &#39;data.frame&#39;:    6310 obs. of  21 variables:
+##  $ X           : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ ID          : int  1001 1002 1003 1004 1005 1006 1007 1008 1009 1010 ...
+##  $ Description : Factor w/ 6306 levels &quot;ABALONE,MIXED SPECIES,RAW&quot;,..: 1240 1239 1235 1972 1973 1974 1975 1976 1977 1978 ...
+##  $ Calories    : int  717 717 876 353 371 334 300 376 403 387 ...
+##  $ Protein     : num  0.85 0.85 0.28 21.4 23.24 ...
+##  $ TotalFat    : num  81.1 81.1 99.5 28.7 29.7 ...
+##  $ Carbohydrate: num  0.06 0.06 0 2.34 2.79 0.45 0.46 3.06 1.28 4.78 ...
+##  $ Sodium      : int  714 827 2 1395 560 629 842 690 621 700 ...
+##  $ Cholesterol : int  215 219 256 75 94 100 72 93 105 103 ...
+##  $ Sugar       : num  0.06 0.06 0 0.5 0.51 ...
+##  $ Calcium     : int  24 24 4 528 674 184 388 673 721 643 ...
+##  $ Iron        : num  0.02 0.16 0 0.31 0.43 0.5 0.33 0.64 0.68 0.21 ...
+##  $ Potassium   : int  24 26 5 256 136 152 187 93 98 95 ...
+##  $ VitaminC    : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ VitaminE    : num  2.32 2.32 2.8 0.25 0.26 ...
+##  $ VitaminD    : num  1.5 1.5 1.8 0.5 0.5 ...
+##  $ HighSodium  : int  1 1 0 1 1 1 1 1 1 1 ...
+##  $ HighCals    : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ HighSugar   : int  0 0 0 0 0 0 0 1 0 1 ...
+##  $ HighProtein : int  0 0 0 1 1 1 1 1 1 1 ...
+##  $ HighFat     : int  1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+</div>
+<div class="section level4">
+<h4>3. Visualize the correlation among Calories, Protein, Total Fat, Carbohydrate, Sodium and Cholesterol. (7 points)</h4>
+<pre class="r"><code class="hljs"><span class="hljs-comment">#install.packages(&quot;PerformanceAnalytics&quot;)</span>
+<span class="hljs-keyword">library</span>(PerformanceAnalytics)</code></pre>
+<pre><code class="hljs">## Loading required package: xts</code></pre>
+<pre><code class="hljs">## Loading required package: zoo</code></pre>
+<pre><code class="hljs">## 
+## Attaching package: &#39;zoo&#39;</code></pre>
+<pre><code class="hljs">## The following objects are masked from &#39;package:base&#39;:
+## 
+##     as.Date, as.Date.numeric</code></pre>
+<pre><code class="hljs">## 
+## Attaching package: &#39;PerformanceAnalytics&#39;</code></pre>
+<pre><code class="hljs">## The following object is masked from &#39;package:graphics&#39;:
+## 
+##     legend</code></pre>
+<pre class="r"><code class="hljs">USDA_Selected_Features &lt;- Usda[, c(<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>)]
+chart.Correlation(USDA_Selected_Features, histogram = <span class="hljs-literal">TRUE</span>,pch=<span class="hljs-number">15</span>)</code></pre>
+<p><img src="javascript://" width="672"/></p>
+</div>
+<div class="section level4">
+<h4>4. Is the correlation between Calories and Total Fat statistically significant? Why? (7 points)</h4>
+<pre class="r"><code class="hljs">cor.test (Usda$Calories,Usda$TotalFat)</code></pre>
+<pre><code class="hljs">## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  Usda$Calories and Usda$TotalFat
+## t = 107.58, df = 6308, p-value &lt; 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.7956139 0.8130305
+## sample estimates:
+##      cor 
+## 0.804495</code></pre>
+<p>#Calories and TotalFat have high positive correlated as the coefficient for correlation is 0.804495. The correlation between Calories and Total Fat statistically significant</p>
+</div>
+<div class="section level4">
+<h4>5. Create a Linear Regression Model, using Calories as the dependent variable Protein, Total Fat, Carbohydrate, Sodium and Cholesterol as the independent variables. (7 points)</h4>
+<pre class="r"><code class="hljs">lm1 = lm(Calories~Protein+TotalFat+Carbohydrate+Sodium+Cholesterol, data=Usda)
+lm1</code></pre>
+<pre><code class="hljs">## 
+## Call:
+## lm(formula = Calories ~ Protein + TotalFat + Carbohydrate + Sodium + 
+##     Cholesterol, data = Usda)
+## 
+## Coefficients:
+##  (Intercept)       Protein      TotalFat  Carbohydrate        Sodium  
+##    3.9882753     3.9891994     8.7716980     3.7432001     0.0003383  
+##  Cholesterol  
+##    0.0110138</code></pre>
+</div>
+<div class="section level4">
+<h4>6. Write the Linear Regression Equation, using Calories as the dependent variable whereas Protein, TotalFat, Carbohydrate, Sodium and Cholesterol as the independent variables. (7 points)</h4>
+<pre class="r"><code class="hljs"><span class="hljs-comment">#Linear Regression Equation:</span>
+<span class="hljs-comment"># Calories = 3.9882753 + (3.9891994*Protein) + (8.7716980*TotalFat) + (3.7432001 *Carbohydrate) + (0.0003383*Sodium) + (0.0110138*Cholesterol)</span></code></pre>
+</div>
+<div class="section level4">
+<h4>7. Which independent variable is the least significant? Why? (7 points)</h4>
+<pre class="r"><code class="hljs">summary(lm1)</code></pre>
+<pre><code class="hljs">## 
+## Call:
+## lm(formula = Calories ~ Protein + TotalFat + Carbohydrate + Sodium + 
+##     Cholesterol, data = Usda)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -191.087   -3.832    0.426    5.147  291.011 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  3.9882753  0.4832629   8.253  &lt; 2e-16 ***
+## Protein      3.9891994  0.0233550 170.807  &lt; 2e-16 ***
+## TotalFat     8.7716980  0.0143291 612.158  &lt; 2e-16 ***
+## Carbohydrate 3.7432001  0.0091404 409.522  &lt; 2e-16 ***
+## Sodium       0.0003383  0.0002189   1.545    0.122    
+## Cholesterol  0.0110138  0.0019861   5.545 3.05e-08 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 18.92 on 6304 degrees of freedom
+## Multiple R-squared:  0.9877, Adjusted R-squared:  0.9877 
+## F-statistic: 1.009e+05 on 5 and 6304 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="section level1">
+<h1>Sodium feature is less significant because in the Analysis of Variance Table the p-value for sodium is 0.0003383, which is not very significant, especially compared to the p-values of the other features.</h1>
+<div class="section level4">
+<h4>8. A new product is just produced with the following data: Protein=0.1, TotalFat=35, Carbohydrate=405, Sodium=440, Cholesterol=70, Sugar=NA, Calcium=35, Iron=NA, Potassium=35, VitaminC=10, VitaminE=NA, VitaminD=NA. Based on the model you created, what is the predicted value for Calories? (7 points)</h4>
+<pre class="r"><code class="hljs">predict_cal=predict(lm1, data.frame(Protein=<span class="hljs-number">0.1</span>, TotalFat=<span class="hljs-number">35</span>, Carbohydrate=<span class="hljs-number">405</span>, Sodium=<span class="hljs-number">440</span>, Cholesterol=<span class="hljs-number">70</span>, Sugar=<span class="hljs-number">0</span>, Calcium=<span class="hljs-number">35</span>, Iron=<span class="hljs-number">0</span>, Potassium=<span class="hljs-number">35</span>, VitaminC=<span class="hljs-number">10</span>, VitaminE=<span class="hljs-number">0</span>, VitaminD=<span class="hljs-number">0</span>), na.action=na.omit)
+
+cat(<span class="hljs-string">&quot;Predicted value for calories is:&quot;</span>, predict_cal)</code></pre>
+<pre><code class="hljs">## Predicted value for calories is: 1828.312</code></pre>
+</div>
+<div class="section level4">
+<h4>9. If the Sodium amount increases from 440 to 44440 (10000% increase), how much change will occur on Calories in percent? Explain why? (7 points)</h4>
+<pre class="r"><code class="hljs">predict_cal1=predict(lm1, data.frame(Protein=<span class="hljs-number">0.1</span>, TotalFat=<span class="hljs-number">35</span>, Carbohydrate=<span class="hljs-number">405</span>, Sodium=<span class="hljs-number">44000</span>, Cholesterol=<span class="hljs-number">70</span>, Sugar=<span class="hljs-number">0</span>, Calcium=<span class="hljs-number">35</span>, Iron=<span class="hljs-number">0</span>, Potassium=<span class="hljs-number">35</span>, VitaminC=<span class="hljs-number">10</span>,  VitaminE=<span class="hljs-number">0</span>, VitaminD=<span class="hljs-number">0</span>), na.action=na.omit)
+
+cat(<span class="hljs-string">&quot;Predicted value for calories (when Sodium=44440) is:&quot;</span>, predict_cal1)</code></pre>
+<pre><code class="hljs">## Predicted value for calories (when Sodium=44440) is: 1843.049</code></pre>
+<pre class="r"><code class="hljs">cat(<span class="hljs-string">&quot;\nChange in Calories is:&quot;</span> , (predict_cal1-predict_cal))</code></pre>
+<pre><code class="hljs">## 
+## Change in Calories is: 14.73644</code></pre>
+<pre class="r"><code class="hljs">cat(<span class="hljs-string">&quot;\nPercentage Change in Calories is:&quot;</span> , (((predict_cal1-predict_cal)/predict_cal))*<span class="hljs-number">100</span>)</code></pre>
+<pre><code class="hljs">## 
+## Percentage Change in Calories is: 0.8060131</code></pre>
+</div>
+</div>
+<div class="section level1">
+<h1>The change in Sodium is (44440-440) 44000, when we multiply it with the coefficient from the linear regression model we get (44000*0.0003383) 14.73644. The coefficient describes the change in the dependent variable for each unit of change in the Sodium variable.</h1>
+<div class="section level4">
+<h4>10. A study of primary education asked elementaty school students to retell two book articles that they read earlier in the week. The first (Article 1) had no pictures, and the second (Article 2) was illustrated with pictures. An expert listened to recordings of the students retelling each article and assigned a score for certain uses of language. Higher scores are better. Here are the data for five readers in this study:</h4>
+</div>
+<div class="section level4">
+<h4>Article 1 0.40 0.72 0.00 0.36 0.55</h4>
+</div>
+<div class="section level4">
+<h4>Article 2 0.77 0.49 0.66 0.28 0.38</h4>
+</div>
+<div class="section level4">
+<h4>A) What are <span class="math inline"><span class="MathJax_Preview" style="color: inherit;display: none;"></span><span class="MathJax" style="position: relative;"><span class="math" style="width: 1.53em;display: inline-block;"><span style="display: inline-block;position: relative;width: 1.252em;height: 0px;font-size: 120%;"><span style="position: absolute;clip: rect;top: -2.22em;left: 0em;"><span class="mrow"><span class="msubsup"><span style="display: inline-block;position: relative;width: 1.252em;height: 0px;"><span style="position: absolute;clip: rect;top: -3.979em;left: 0em;"><span class="mi" style="font-family: MathJax_Math-italic;">H<span style="display: inline-block;overflow: hidden;height: 1px;width: 0.049em;"></span></span><span style="display: inline-block;width: 0px;height: 3.984em;"></span></span><span style="position: absolute;top: -3.84em;left: 0.836em;"><span class="mn" style="font-size: 70.7%;font-family: MathJax_Main;">0</span><span style="display: inline-block;width: 0px;height: 3.984em;"></span></span></span></span></span><span style="display: inline-block;width: 0px;height: 2.225em;"></span></span></span><span style="display: inline-block;overflow: hidden;vertical-align: -0.275em;border-left: 0px solid;width: 0px;height: 1.114em;"></span></span><span class="MJX_Assistive_MathML"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>H</mi><mn>0</mn></msub></math></span></span></span> and <span class="math inline"><span class="MathJax_Preview" style="color: inherit;display: none;"></span><span class="MathJax" style="position: relative;"><span class="math" style="width: 1.576em;display: inline-block;"><span style="display: inline-block;position: relative;width: 1.299em;height: 0px;font-size: 120%;"><span style="position: absolute;clip: rect;top: -2.22em;left: 0em;"><span class="mrow"><span class="msubsup"><span style="display: inline-block;position: relative;width: 1.299em;height: 0px;"><span style="position: absolute;clip: rect;top: -3.979em;left: 0em;"><span class="mi" style="font-family: MathJax_Math-italic;">H<span style="display: inline-block;overflow: hidden;height: 1px;width: 0.049em;"></span></span><span style="display: inline-block;width: 0px;height: 3.984em;"></span></span><span style="position: absolute;top: -3.84em;left: 0.836em;"><span class="mi" style="font-size: 70.7%;font-family: MathJax_Math-italic;">a</span><span style="display: inline-block;width: 0px;height: 3.984em;"></span></span></span></span></span><span style="display: inline-block;width: 0px;height: 2.225em;"></span></span></span><span style="display: inline-block;overflow: hidden;vertical-align: -0.219em;border-left: 0px solid;width: 0px;height: 1.114em;"></span></span><span class="MJX_Assistive_MathML"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>H</mi><mi>a</mi></msub></math></span></span></span> ? (5 points)</h4>
+<pre class="r"><code class="hljs"><span class="hljs-comment"># H_0: The scores of the students from both are equal.</span>
+<span class="hljs-comment"># H_a: The scores of the students from both groups are not equal.</span></code></pre>
+</div>
+<div class="section level4">
+<h4>B) Is this a paired or unpaired experiment? (5 points)</h4>
+<pre class="r"><code class="hljs"><span class="hljs-comment">#Paired Experiment </span></code></pre>
+</div>
+<div class="section level4">
+<h4>C) Based on your previous answer, which nonparametric test statistic would you use to compare the medians of Article 1 and Article 2. (5 points)</h4>
+<pre class="r"><code class="hljs"><span class="hljs-comment">#Wilcoxon Signed Rank Test</span></code></pre>
+</div>
+<div class="section level4">
+<h4>D) Use a nonparametric test statistic to check if there is a statistically significant difference between the medians of Article 1 and Article 2. (5 points)</h4>
+<pre class="r"><code class="hljs">Art1&lt;-c(<span class="hljs-number">0.40</span>,<span class="hljs-number">0.72</span>,<span class="hljs-number">0.00</span>,<span class="hljs-number">0.36</span>,<span class="hljs-number">0.55</span>)
+Art2&lt;-c(<span class="hljs-number">0.77</span>,<span class="hljs-number">0.49</span>,<span class="hljs-number">0.66</span>,<span class="hljs-number">0.28</span>,<span class="hljs-number">0.38</span>)
+wilcox.test(Art1,Art2, paired=<span class="hljs-literal">TRUE</span>)</code></pre>
+<pre><code class="hljs">## 
+##  Wilcoxon signed rank test
+## 
+## data:  Art1 and Art2
+## V = 6, p-value = 0.8125
+## alternative hypothesis: true location shift is not equal to 0</code></pre>
+</div>
+<div class="section level4">
+<h4>E) Will you accept or reject your Null Hypothesis? (<span class="math inline"><span class="MathJax_Preview" style="color: inherit;display: none;"></span><span class="MathJax" style="position: relative;"><span class="math" style="width: 4.539em;display: inline-block;"><span style="display: inline-block;position: relative;width: 3.752em;height: 0px;font-size: 120%;"><span style="position: absolute;clip: rect;top: -2.22em;left: 0em;"><span class="mrow"><span class="mi" style="font-family: MathJax_Math-italic;">α</span><span class="mo" style="font-family: MathJax_Main;padding-left: 0.28em;">=</span><span class="mn" style="font-family: MathJax_Main;padding-left: 0.28em;">0.05</span></span><span style="display: inline-block;width: 0px;height: 2.225em;"></span></span></span><span style="display: inline-block;overflow: hidden;vertical-align: -0.053em;border-left: 0px solid;width: 0px;height: 0.947em;"></span></span><span class="MJX_Assistive_MathML"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>α</mi><mo>=</mo><mn>0.05</mn></math></span></span></span>) Do illustrations improve how the students retell an article or not? Why? (5 points)</h4>
+<pre class="r"><code class="hljs"><span class="hljs-comment"># Since the p-value is greater than 0.05, we cannot reject the null hypothesis. Illustrations donot improve how the students retell an article. There is no significant difference between both the articles. </span></code></pre>
+</div>
+<div class="section level4">
+<h4>11. Two companies selling toothpastes with the lable of 100 grams per tube on the package. We randomly bought eight toothpastes from each company A and B from random stores. Afterwards, we scaled them using high precision scale. Our measurements are recorded as follows:</h4>
+</div>
+<div class="section level4">
+<h4>Company A: 97.1 101.3 107.8 101.9 97.4 104.5 99.5 95.1</h4>
+</div>
+<div class="section level4">
+<h4>Company B: 103.5 105.3 106.5 107.9 102.1 105.6 109.8 97.2</h4>
+</div>
+<div class="section level4">
+<h4>A) Is this a paired or unpaired experiment? (5 points)</h4>
+<pre class="r"><code class="hljs"><span class="hljs-comment"># Unpaired</span></code></pre>
+</div>
+<div class="section level4">
+<h4>B) Based on your previous answer, which nonparametric test statistic would you use to compare the medians of Company A and Company B. (5 points)</h4>
+<pre class="r"><code class="hljs"><span class="hljs-comment">#Wilcoxon rank sum test</span></code></pre>
+</div>
+<div class="section level4">
+<h4>C) Use a nonparametric test statistic to check if there is a statistically significant difference between the medians of Company A and Company B. (5 points)</h4>
+<pre class="r"><code class="hljs">CompanyA &lt;- c(<span class="hljs-number">97.1</span> ,<span class="hljs-number">101.3</span>,<span class="hljs-number">107.8</span>,<span class="hljs-number">101.9</span>,<span class="hljs-number">97.4</span>,<span class="hljs-number">104.5</span>,<span class="hljs-number">99.5</span>,<span class="hljs-number">95.1</span>)
+CompanyB &lt;- c(<span class="hljs-number">103.5</span> ,<span class="hljs-number">105.3</span>,<span class="hljs-number">106.5</span>,<span class="hljs-number">107.9</span>,<span class="hljs-number">102.1</span>,<span class="hljs-number">105.6</span>,<span class="hljs-number">109.8</span>,<span class="hljs-number">97.2</span>)
+wilcox.test(CompanyA,CompanyB, exact = <span class="hljs-literal">T</span>)</code></pre>
+<pre><code class="hljs">## 
+##  Wilcoxon rank sum test
+## 
+## data:  CompanyA and CompanyB
+## W = 13, p-value = 0.04988
+## alternative hypothesis: true location shift is not equal to 0</code></pre>
+</div>
+<div class="section level4">
+<h4>D) Will you accept or reject your Null Hypothesis? (<span class="math inline"><span class="MathJax_Preview" style="color: inherit;display: none;"></span><span class="MathJax" style="position: relative;"><span class="math" style="width: 4.539em;display: inline-block;"><span style="display: inline-block;position: relative;width: 3.752em;height: 0px;font-size: 120%;"><span style="position: absolute;clip: rect;top: -2.22em;left: 0em;"><span class="mrow"><span class="mi" style="font-family: MathJax_Math-italic;">α</span><span class="mo" style="font-family: MathJax_Main;padding-left: 0.28em;">=</span><span class="mn" style="font-family: MathJax_Main;padding-left: 0.28em;">0.05</span></span><span style="display: inline-block;width: 0px;height: 2.225em;"></span></span></span><span style="display: inline-block;overflow: hidden;vertical-align: -0.053em;border-left: 0px solid;width: 0px;height: 0.947em;"></span></span><span class="MJX_Assistive_MathML"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>α</mi><mo>=</mo><mn>0.05</mn></math></span></span></span>) Are packaging process similar or different based on weight measurements? Why? (5 points)</h4>
+<pre class="r"><code class="hljs"><span class="hljs-comment"># Since the p-value is less than 0.05, we reject the null hypothesis. We conclude that there is enough evidence to support that packaging process similar based on weight measurements</span></code></pre>
+<p>This is the end of Assignment 2</p>
+<p>Ceni Babaoglu, PhD</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div style="position: absolute;width: 0px;height: 0px;overflow: hidden;padding: 0px;border: 0px;margin: 0px;"><div style="position: absolute;visibility: hidden;top: 0px;left: 0px;width: auto;padding: 0px;border: 0px;margin: 0px;white-space: nowrap;text-align: left;text-indent: 0px;text-transform: none;line-height: normal;letter-spacing: normal;word-spacing: normal;font-size: 40px;font-weight: normal;font-style: normal;font-family: MathJax_Main, sans-serif;"></div></div><script type="text/javascript" src="/d2l/common/math/MathML.js?v=20.21.4.28830 "></script><script type="text/javascript">document.addEventListener('DOMContentLoaded', function() { D2LMathML.DesktopInit('https://s.brightspace.com/lib/mathjax/2.7.4/MathJax.js?config=MML_HTMLorMML','https://s.brightspace.com/lib/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML','130',false); });</script></body></html>

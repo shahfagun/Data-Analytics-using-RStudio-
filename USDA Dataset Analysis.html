@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html><head></head><body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div style="display: none;"></div>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="fluid-row">
+
+
+
+<h1 class="title toc-ignore">CMTH 642 Data Analytics: Advanced Methods</h1>
+
+</div>
+
+
+<center>
+<h1>
+Assignment 1 (10%)
+</h1>
+</center>
+<center>
+<h3>
+Fagun Shah
+</h3>
+</center>
+<center>
+<h3>
+501066618
+</h3>
+</center>
+<hr/>
+<div class="section level4">
+<h4>1. Read the csv files in the folder. (3 points)</h4>
+<pre class="r"><code class="hljs">Macro&lt;- read.csv(<span class="hljs-string">&quot;USDA_Macronutrients.csv&quot;</span>)
+Micro&lt;-read.csv(<span class="hljs-string">&quot;USDA_Micronutrients.csv&quot;</span>)</code></pre>
+</div>
+<div class="section level4">
+<h4>2. Merge the data frames using the variable “ID”. Name the Merged Data Frame “USDA”. (6 points)</h4>
+<pre class="r"><code class="hljs">USDA&lt;-merge(Macro,Micro,by=<span class="hljs-string">&quot;ID&quot;</span>)</code></pre>
+</div>
+<div class="section level4">
+<h4>3. Check the datatypes of the attributes. Delete the commas in the Sodium and Potasium records. Assign Sodium and Potasium as numeric data types. (6 points)</h4>
+<pre class="r"><code class="hljs">sapply(USDA, class)</code></pre>
+<pre><code class="hljs">##           ID  Description     Calories      Protein     TotalFat Carbohydrate 
+##    &quot;integer&quot;     &quot;factor&quot;    &quot;integer&quot;    &quot;numeric&quot;    &quot;numeric&quot;    &quot;numeric&quot; 
+##       Sodium  Cholesterol        Sugar      Calcium         Iron    Potassium 
+##     &quot;factor&quot;    &quot;integer&quot;    &quot;numeric&quot;    &quot;integer&quot;    &quot;numeric&quot;     &quot;factor&quot; 
+##     VitaminC     VitaminE     VitaminD 
+##    &quot;numeric&quot;    &quot;numeric&quot;    &quot;numeric&quot;</code></pre>
+<pre class="r"><code class="hljs">USDA$Sodium = gsub(<span class="hljs-string">&quot;,&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, USDA$Sodium)
+USDA$Potassium = gsub(<span class="hljs-string">&quot;,&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, USDA$Potassium)
+USDA$Sodium = as.numeric(USDA$Sodium)
+USDA$Potassium = as.numeric(USDA$Potassium)</code></pre>
+</div>
+<div class="section level4">
+<h4>4. Remove records (rows) with missing values in more than 4 attributes (columns). How many records remain in the data frame? (6 points)</h4>
+<pre class="r"><code class="hljs">na_count = apply(is.na(USDA), <span class="hljs-number">1</span>, sum)
+USDA = USDA[na_count &lt; <span class="hljs-number">5</span>,]
+cat(<span class="hljs-string">&quot;Number of remaining records:&quot;</span>, nrow(USDA))</code></pre>
+<pre><code class="hljs">## Number of remaining records: 6887</code></pre>
+</div>
+<div class="section level4">
+<h4>5. For records with missing values for Sugar, Vitamin E and Vitamin D, replace missing values with mean value for the respective variable. (6 points)</h4>
+<pre class="r"><code class="hljs">USDA$Sugar[is.na(USDA$Sugar)] = mean(USDA$Sugar[!is.na(USDA$Sugar)])
+USDA$VitaminE[is.na(USDA$VitaminE)] = mean(USDA$VitaminE[!is.na(USDA$VitaminE)])
+USDA$VitaminD[is.na(USDA$VitaminD)] = mean(USDA$VitaminD[!is.na(USDA$VitaminD)])</code></pre>
+</div>
+<div class="section level4">
+<h4>6. With a single line of code, remove all remaining records with missing values. Name the new Data Frame “USDAclean”. How many records remain in the data frame? (6 points)</h4>
+<pre class="r"><code class="hljs">USDAclean = USDA[complete.cases(USDA),]
+cat(<span class="hljs-string">&quot;Number of remaining records:&quot;</span>, nrow(USDAclean))</code></pre>
+<pre><code class="hljs">## Number of remaining records: 6310</code></pre>
+</div>
+<div class="section level4">
+<h4>7. Which food has the highest sodium level? (6 points)</h4>
+<pre class="r"><code class="hljs">as.character(USDAclean$Description[USDAclean$Sodium == max(USDAclean$Sodium)])</code></pre>
+<pre><code class="hljs">## [1] &quot;SALT,TABLE&quot;</code></pre>
+</div>
+<div class="section level4">
+<h4>8. Create a histogram of Vitamin C distribution in foods. (6 points)</h4>
+<pre class="r"><code class="hljs">hist(USDAclean$VitaminC, col = <span class="hljs-string">&quot;purple&quot;</span>, border = <span class="hljs-string">&quot;pink&quot;</span>,xlim = c(<span class="hljs-number">0</span>, <span class="hljs-number">500</span>),ylim = c(<span class="hljs-number">0</span>,<span class="hljs-number">500</span>), breaks = <span class="hljs-number">100</span>, labels = <span class="hljs-literal">T</span>, main= <span class="hljs-string">&quot;Histogram of Vitamin C&quot;</span>)</code></pre>
+<p><img src="javascript://" width="672"/></p>
+</div>
+<div class="section level4">
+<h4>9. Create a boxplot to illustrate the distribution of values for TotalFat, Protein and Carbohydrate. (6 points)</h4>
+<pre class="r"><code class="hljs">with(USDAclean, boxplot(TotalFat, Protein, Carbohydrate, at= c(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>), names =c(<span class="hljs-string">&quot;TotalFat&quot;</span>,<span class="hljs-string">&quot;Protein&quot;</span>,<span class="hljs-string">&quot;Carbohydrate&quot;</span>),ylab=<span class="hljs-string">&quot;Distribution of values&quot;</span>, col = <span class="hljs-string">&quot;blue&quot;</span>, border = <span class="hljs-string">&quot;brown&quot;</span>, notch = <span class="hljs-literal">T</span>))</code></pre>
+<p><img src="javascript://" width="672"/></p>
+</div>
+<div class="section level4">
+<h4>10. Create a scatterplot to illustrate the relationship between a food’s TotalFat content and its Calorie content. (6 points)</h4>
+<pre class="r"><code class="hljs">with(USDAclean, plot(TotalFat, Calories,col=<span class="hljs-string">&quot;red&quot;</span>,lwd= <span class="hljs-number">3</span>, main=<span class="hljs-string">&quot;Relationship of TotalFats and its calorie&quot;</span>, xlab=<span class="hljs-string">&quot;Calories&quot;</span>, ylab=<span class="hljs-string">&quot;TotalFat&quot;</span>))</code></pre>
+<p><img src="javascript://" width="672"/></p>
+</div>
+<div class="section level4">
+<h4>11. Add a variable to the data frame that takes value 1 if the food has higher sodium than average, 0 otherwise. Call this variable HighSodium. Do the same for High Calories, High Protein, High Sugar, and High Fat. How many foods have both high sodium and high fat? (8 points)</h4>
+<pre class="r"><code class="hljs">USDAclean$HighSodium = <span class="hljs-number">0</span>
+USDAclean$HighSodium[USDAclean$Sodium &gt; mean(USDAclean$Sodium)] = <span class="hljs-number">1</span>
+USDAclean$HighCalories = <span class="hljs-number">0</span>
+USDAclean$HighCalories[USDAclean$Calories &gt; mean(USDAclean$Calories)] = <span class="hljs-number">1</span>
+USDAclean$HighProtein = <span class="hljs-number">0</span>
+USDAclean$HighProtein[USDAclean$Protein &gt; mean(USDAclean$Protein)] = <span class="hljs-number">1</span>
+USDAclean$HighSugar = <span class="hljs-number">0</span>
+USDAclean$HighSugar[USDAclean$Sugar &gt; mean(USDAclean$Sugar)] = <span class="hljs-number">1</span>
+USDAclean$HighFat = <span class="hljs-number">0</span>
+USDAclean$HighFat[USDAclean$TotalFat &gt; mean(USDAclean$TotalFat)] = <span class="hljs-number">1</span>
+cat(sum(apply(USDAclean[c(<span class="hljs-string">&quot;HighSodium&quot;</span>, <span class="hljs-string">&quot;HighFat&quot;</span>)], <span class="hljs-number">1</span>, <span class="hljs-keyword">function</span>(x) sum(x) == <span class="hljs-number">2</span>)), <span class="hljs-string">&quot;Foods have both high sodium and high fat.&quot;</span>)</code></pre>
+<pre><code class="hljs">## 644 Foods have both high sodium and high fat.</code></pre>
+</div>
+<div class="section level4">
+<h4>12. Calculate the average amount of iron, for high and low protein foods. (8 points)</h4>
+<pre class="r"><code class="hljs">with(USDAclean, tapply(Iron, HighProtein, mean))</code></pre>
+<pre><code class="hljs">##        0        1 
+## 2.696634 3.069541</code></pre>
+</div>
+<div class="section level4">
+<h4>13. Create a script for a “HealthCheck” program to detect unhealthy foods. Use the algorithm flowchart below as a basis for this script. (8 points)</h4>
+<pre class="r"><code class="hljs"><span class="hljs-keyword">require</span>(jpeg)</code></pre>
+<pre><code class="hljs">## Loading required package: jpeg</code></pre>
+<pre class="r"><code class="hljs">img&lt;-readJPEG(<span class="hljs-string">&quot;HealthCheck.jpg&quot;</span>)
+plot(<span class="hljs-number">1</span>:<span class="hljs-number">4</span>, ty = <span class="hljs-string">&#39;n&#39;</span>, ann = <span class="hljs-literal">F</span>, xaxt = <span class="hljs-string">&#39;n&#39;</span>, yaxt = <span class="hljs-string">&#39;n&#39;</span>)
+rasterImage(img,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">4</span>,<span class="hljs-number">4</span>)</code></pre>
+<p><img src="javascript://" width="672"/></p>
+<pre class="r"><code class="hljs">HealthCheck = <span class="hljs-keyword">function</span>(x) {
+  <span class="hljs-keyword">if</span> (x$HighSodium == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span>(<span class="hljs-string">&quot;Pass&quot;</span>)
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (x$HighSugar == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span>(<span class="hljs-string">&quot;Pass&quot;</span>)
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (x$HighFat == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span>(<span class="hljs-string">&quot;Pass&quot;</span>)
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span>(<span class="hljs-string">&quot;Fail&quot;</span>)
+}</code></pre>
+</div>
+<div class="section level4">
+<h4>14. Add a new variable called HealthCheck to the data frame using the output of the function. (8 points)</h4>
+<pre class="r"><code class="hljs"><span class="hljs-keyword">for</span> (i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nrow(USDAclean)) {
+  USDAclean$HealthCheck[i] = HealthCheck(USDAclean[i,])
+}</code></pre>
+</div>
+<div class="section level4">
+<h4>15. How many foods in the USDAclean data frame fail the HealthCheck? (8 points)</h4>
+<pre class="r"><code class="hljs">sum(USDAclean$HealthCheck == <span class="hljs-string">&#39;Fail&#39;</span>)</code></pre>
+<pre><code class="hljs">## [1] 237</code></pre>
+</div>
+<div class="section level4">
+<h4>16. Save your final data frame as “USDAclean_ [your last name].” (3 points)</h4>
+<pre class="r"><code class="hljs">write.csv(USDAclean, <span class="hljs-string">&quot;USDAclean_Shah&quot;</span>)</code></pre>
+<p>This is the end of Assignment 1</p>
+<p>Ceni Babaoglu, PhD</p>
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="/d2l/common/math/MathML.js?v=20.21.4.28830 "></script><script type="text/javascript">document.addEventListener('DOMContentLoaded', function() { D2LMathML.DesktopInit('https://s.brightspace.com/lib/mathjax/2.7.4/MathJax.js?config=MML_HTMLorMML','https://s.brightspace.com/lib/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML','130',false); });</script></body></html>

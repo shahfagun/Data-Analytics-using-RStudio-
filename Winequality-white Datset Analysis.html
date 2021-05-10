@@ -1,0 +1,334 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html><head></head><body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div style="display: none;"></div>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="fluid-row">
+
+
+
+<h1 class="title toc-ignore">CMTH 642 Data Analytics: Advanced Methods</h1>
+
+</div>
+
+
+<center>
+<h1>
+Assignment 3 (10%)
+</h1>
+</center>
+<center>
+<h3>
+FAGUN SHAH
+</h3>
+</center>
+<center>
+<h3>
+501066618
+</h3>
+</center>
+<hr/>
+<div class="section level4">
+<h4>1. Import to R the following file: <a rel="noopener" href="http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv" class="uri">http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv</a> (The dataset is related to white Portuguese “Vinho Verde” wine. For more info: <a rel="noopener" href="https://archive.ics.uci.edu/ml/datasets/Wine+Quality" class="uri">https://archive.ics.uci.edu/ml/datasets/Wine+Quality</a>) (3 points)</h4>
+<pre class="r"><code class="hljs"><span class="hljs-comment">#install.packages(&quot;class&quot;)</span>
+<span class="hljs-comment">#install.packages(&quot;gmodels&quot;)</span>
+<span class="hljs-keyword">library</span>(class)
+<span class="hljs-keyword">library</span>(gmodels)
+dataurl = <span class="hljs-string">&quot;http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv&quot;</span>
+Wine = read.csv(dataurl, header = <span class="hljs-literal">TRUE</span>, sep = <span class="hljs-string">&quot;;&quot;</span>)
+head(Wine)</code></pre>
+<pre><code class="hljs">##   fixed.acidity volatile.acidity citric.acid residual.sugar chlorides
+## 1           7.0             0.27        0.36           20.7     0.045
+## 2           6.3             0.30        0.34            1.6     0.049
+## 3           8.1             0.28        0.40            6.9     0.050
+## 4           7.2             0.23        0.32            8.5     0.058
+## 5           7.2             0.23        0.32            8.5     0.058
+## 6           8.1             0.28        0.40            6.9     0.050
+##   free.sulfur.dioxide total.sulfur.dioxide density   pH sulphates alcohol
+## 1                  45                  170  1.0010 3.00      0.45     8.8
+## 2                  14                  132  0.9940 3.30      0.49     9.5
+## 3                  30                   97  0.9951 3.26      0.44    10.1
+## 4                  47                  186  0.9956 3.19      0.40     9.9
+## 5                  47                  186  0.9956 3.19      0.40     9.9
+## 6                  30                   97  0.9951 3.26      0.44    10.1
+##   quality
+## 1       6
+## 2       6
+## 3       6
+## 4       6
+## 5       6
+## 6       6</code></pre>
+</div>
+<div class="section level4">
+<h4>2. Check the datatypes of the attributes. (3 points)</h4>
+<pre class="r"><code class="hljs">str(Wine)</code></pre>
+<pre><code class="hljs">## &#39;data.frame&#39;:    4898 obs. of  12 variables:
+##  $ fixed.acidity       : num  7 6.3 8.1 7.2 7.2 8.1 6.2 7 6.3 8.1 ...
+##  $ volatile.acidity    : num  0.27 0.3 0.28 0.23 0.23 0.28 0.32 0.27 0.3 0.22 ...
+##  $ citric.acid         : num  0.36 0.34 0.4 0.32 0.32 0.4 0.16 0.36 0.34 0.43 ...
+##  $ residual.sugar      : num  20.7 1.6 6.9 8.5 8.5 6.9 7 20.7 1.6 1.5 ...
+##  $ chlorides           : num  0.045 0.049 0.05 0.058 0.058 0.05 0.045 0.045 0.049 0.044 ...
+##  $ free.sulfur.dioxide : num  45 14 30 47 47 30 30 45 14 28 ...
+##  $ total.sulfur.dioxide: num  170 132 97 186 186 97 136 170 132 129 ...
+##  $ density             : num  1.001 0.994 0.995 0.996 0.996 ...
+##  $ pH                  : num  3 3.3 3.26 3.19 3.19 3.26 3.18 3 3.3 3.22 ...
+##  $ sulphates           : num  0.45 0.49 0.44 0.4 0.4 0.44 0.47 0.45 0.49 0.45 ...
+##  $ alcohol             : num  8.8 9.5 10.1 9.9 9.9 10.1 9.6 8.8 9.5 11 ...
+##  $ quality             : int  6 6 6 6 6 6 6 6 6 6 ...</code></pre>
+</div>
+<div class="section level4">
+<h4>3. Are there any missing values in the dataset? (4 points)</h4>
+<pre class="r"><code class="hljs">which(is.na(Wine))</code></pre>
+<pre><code class="hljs">## integer(0)</code></pre>
+</div>
+<div class="section level1">
+<h1>No missing values found</h1>
+<div class="section level4">
+<h4>4. What is the correlation between the attributes other than Quality? (10 points)</h4>
+<pre class="r"><code class="hljs">Wine_corr = cor(Wine[-<span class="hljs-number">12</span>])
+Wine_corr</code></pre>
+<pre><code class="hljs">##                      fixed.acidity volatile.acidity citric.acid residual.sugar
+## fixed.acidity           1.00000000      -0.02269729  0.28918070     0.08902070
+## volatile.acidity       -0.02269729       1.00000000 -0.14947181     0.06428606
+## citric.acid             0.28918070      -0.14947181  1.00000000     0.09421162
+## residual.sugar          0.08902070       0.06428606  0.09421162     1.00000000
+## chlorides               0.02308564       0.07051157  0.11436445     0.08868454
+## free.sulfur.dioxide    -0.04939586      -0.09701194  0.09407722     0.29909835
+## total.sulfur.dioxide    0.09106976       0.08926050  0.12113080     0.40143931
+## density                 0.26533101       0.02711385  0.14950257     0.83896645
+## pH                     -0.42585829      -0.03191537 -0.16374821    -0.19413345
+## sulphates              -0.01714299      -0.03572815  0.06233094    -0.02666437
+## alcohol                -0.12088112       0.06771794 -0.07572873    -0.45063122
+##                        chlorides free.sulfur.dioxide total.sulfur.dioxide
+## fixed.acidity         0.02308564       -0.0493958591          0.091069756
+## volatile.acidity      0.07051157       -0.0970119393          0.089260504
+## citric.acid           0.11436445        0.0940772210          0.121130798
+## residual.sugar        0.08868454        0.2990983537          0.401439311
+## chlorides             1.00000000        0.1013923521          0.198910300
+## free.sulfur.dioxide   0.10139235        1.0000000000          0.615500965
+## total.sulfur.dioxide  0.19891030        0.6155009650          1.000000000
+## density               0.25721132        0.2942104109          0.529881324
+## pH                   -0.09043946       -0.0006177961          0.002320972
+## sulphates             0.01676288        0.0592172458          0.134562367
+## alcohol              -0.36018871       -0.2501039415         -0.448892102
+##                          density            pH   sulphates     alcohol
+## fixed.acidity         0.26533101 -0.4258582910 -0.01714299 -0.12088112
+## volatile.acidity      0.02711385 -0.0319153683 -0.03572815  0.06771794
+## citric.acid           0.14950257 -0.1637482114  0.06233094 -0.07572873
+## residual.sugar        0.83896645 -0.1941334540 -0.02666437 -0.45063122
+## chlorides             0.25721132 -0.0904394560  0.01676288 -0.36018871
+## free.sulfur.dioxide   0.29421041 -0.0006177961  0.05921725 -0.25010394
+## total.sulfur.dioxide  0.52988132  0.0023209718  0.13456237 -0.44889210
+## density               1.00000000 -0.0935914935  0.07449315 -0.78013762
+## pH                   -0.09359149  1.0000000000  0.15595150  0.12143210
+## sulphates             0.07449315  0.1559514973  1.00000000 -0.01743277
+## alcohol              -0.78013762  0.1214320987 -0.01743277  1.00000000</code></pre>
+<pre class="r"><code class="hljs"><span class="hljs-comment">#install.packages(&quot;corrplot&quot;)</span>
+<span class="hljs-keyword">library</span>(corrplot)</code></pre>
+<pre><code class="hljs">## corrplot 0.84 loaded</code></pre>
+<pre class="r"><code class="hljs">corrplot.mixed(Wine_corr, lower.col = <span class="hljs-string">&#39;red&#39;</span>, number.cex = <span class="hljs-number">0.75</span>)</code></pre>
+<p><img src="javascript://" width="672"/></p>
+</div>
+<div class="section level4">
+<h4>5. Graph the frequency distribution of wine quality by using Quality. (10 points)</h4>
+<pre class="r"><code class="hljs">hist(Wine$quality, main = <span class="hljs-string">&quot;Frequency distribution of Wine Quality&quot;</span> , col = <span class="hljs-string">&quot;purple&quot;</span>)</code></pre>
+<p><img src="javascript://" width="672"/></p>
+</div>
+<div class="section level4">
+<h4>6. Reduce the levels of rating for quality to three levels as high, medium and low. Assign the levels of 3 and 4 to level 0; 5 and 6 to level 1; and 7,8 and 9 to level 2. (10 points)</h4>
+<pre class="r"><code class="hljs">Wine$quality = ifelse(Wine$quality &lt; <span class="hljs-number">5</span>, <span class="hljs-string">&#39;low&#39;</span>, ifelse(Wine$quality &gt; <span class="hljs-number">7</span>, <span class="hljs-string">&#39;high&#39;</span>, <span class="hljs-string">&#39;medium&#39;</span>))
+Wine$quality = ordered(Wine$quality, c(<span class="hljs-string">&#39;low&#39;</span>, <span class="hljs-string">&#39;medium&#39;</span>, <span class="hljs-string">&#39;high&#39;</span>))
+round(prop.table(table(Wine$quality)) * <span class="hljs-number">100</span>, digits = <span class="hljs-number">1</span>)</code></pre>
+<pre><code class="hljs">## 
+##    low medium   high 
+##    3.7   92.6    3.7</code></pre>
+</div>
+<div class="section level4">
+<h4>7. Normalize the data set by using the following function: (12 points)</h4>
+<pre class="r"><code class="hljs">normalize &lt;- <span class="hljs-keyword">function</span>(x){
+  <span class="hljs-keyword">return</span> ((x - min(x)) / (max(x) - min(x)))
+}</code></pre>
+<pre class="r"><code class="hljs">Wine2 = as.data.frame(sapply(Wine[-<span class="hljs-number">12</span>], normalize))
+head(Wine2, <span class="hljs-number">10</span>)</code></pre>
+<pre><code class="hljs">##    fixed.acidity volatile.acidity citric.acid residual.sugar chlorides
+## 1      0.3076923        0.1862745  0.21686747     0.30828221 0.1068249
+## 2      0.2403846        0.2156863  0.20481928     0.01533742 0.1186944
+## 3      0.4134615        0.1960784  0.24096386     0.09662577 0.1216617
+## 4      0.3269231        0.1470588  0.19277108     0.12116564 0.1454006
+## 5      0.3269231        0.1470588  0.19277108     0.12116564 0.1454006
+## 6      0.4134615        0.1960784  0.24096386     0.09662577 0.1216617
+## 7      0.2307692        0.2352941  0.09638554     0.09815951 0.1068249
+## 8      0.3076923        0.1862745  0.21686747     0.30828221 0.1068249
+## 9      0.2403846        0.2156863  0.20481928     0.01533742 0.1186944
+## 10     0.4134615        0.1372549  0.25903614     0.01380368 0.1038576
+##    free.sulfur.dioxide total.sulfur.dioxide   density        pH sulphates
+## 1           0.14982578            0.3735499 0.2677848 0.2545455 0.2674419
+## 2           0.04181185            0.2853828 0.1328321 0.5272727 0.3139535
+## 3           0.09756098            0.2041763 0.1540389 0.4909091 0.2558140
+## 4           0.15679443            0.4106729 0.1636784 0.4272727 0.2093023
+## 5           0.15679443            0.4106729 0.1636784 0.4272727 0.2093023
+## 6           0.09756098            0.2041763 0.1540389 0.4909091 0.2558140
+## 7           0.09756098            0.2946636 0.1501832 0.4181818 0.2906977
+## 8           0.14982578            0.3735499 0.2677848 0.2545455 0.2674419
+## 9           0.04181185            0.2853828 0.1328321 0.5272727 0.3139535
+## 10          0.09059233            0.2784223 0.1289763 0.4545455 0.2674419
+##      alcohol
+## 1  0.1290323
+## 2  0.2419355
+## 3  0.3387097
+## 4  0.3064516
+## 5  0.3064516
+## 6  0.3387097
+## 7  0.2580645
+## 8  0.1290323
+## 9  0.2419355
+## 10 0.4838710</code></pre>
+</div>
+<div class="section level4">
+<h4>8. Divide the dataset to training and test sets. (12 points)</h4>
+<pre class="r"><code class="hljs">train_ind = sample(nrow(Wine), floor(<span class="hljs-number">0.70</span> * nrow(Wine)))
+train = Wine2[train_ind,]
+test = Wine2[-train_ind,]
+train_labels = Wine[train_ind, <span class="hljs-number">12</span>] 
+test_labels = Wine[-train_ind, <span class="hljs-number">12</span>]</code></pre>
+</div>
+<div class="section level4">
+<h4>9. Use the KNN algorithm to predict the quality of wine using its attributes. (12 points)</h4>
+<pre class="r"><code class="hljs"><span class="hljs-comment">#install.packages(&quot;class&quot;, dependencies = TRUE)</span>
+<span class="hljs-keyword">library</span>(class)
+Wine_prediction &lt;- knn(train, test, train_labels, <span class="hljs-number">5</span>)
+plot(Wine_prediction)</code></pre>
+<p><img src="javascript://" width="672"/></p>
+<pre class="r"><code class="hljs"><span class="hljs-keyword">library</span>(plyr)
+count(Wine_prediction)</code></pre>
+<pre><code class="hljs">##        x freq
+## 1    low    7
+## 2 medium 1443
+## 3   high   20</code></pre>
+</div>
+<div class="section level4">
+<h4>10. Display the confusion matrix to evaluate the model performance. (12 points)</h4>
+<pre class="r"><code class="hljs">confusion_matrix &lt;- table (actual = test_labels, predicted = Wine_prediction)
+confusion_matrix</code></pre>
+<pre><code class="hljs">##         predicted
+## actual    low medium high
+##   low       3     45    0
+##   medium    4   1345   18
+##   high      0     53    2</code></pre>
+</div>
+<div class="section level4">
+<h4>11. Evaluate the model performance by computing Accuracy, Sensitivity and Specificity. (12 points)</h4>
+<pre class="r"><code class="hljs"><span class="hljs-comment">#install.packages(&quot;caret&quot;, dependencies=TRUE)</span>
+<span class="hljs-keyword">library</span>(caret)</code></pre>
+<pre><code class="hljs">## Loading required package: lattice</code></pre>
+<pre><code class="hljs">## Loading required package: ggplot2</code></pre>
+<pre class="r"><code class="hljs"><span class="hljs-comment">#install.packages(&#39;e1071&#39;, )</span>
+confusionMatrix(Wine_prediction,test_labels)</code></pre>
+<pre><code class="hljs">## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction  low medium high
+##     low       3      4    0
+##     medium   45   1345   53
+##     high      0     18    2
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.9184          
+##                  95% CI : (0.9032, 0.9319)
+##     No Information Rate : 0.9299          
+##     P-Value [Acc &gt; NIR] : 0.9607          
+##                                           
+##                   Kappa : 0.0561          
+##                                           
+##  Mcnemar&#39;s Test P-Value : NA              
+## 
+## Statistics by Class:
+## 
+##                      Class: low Class: medium Class: high
+## Sensitivity            0.062500       0.98391    0.036364
+## Specificity            0.997187       0.04854    0.987279
+## Pos Pred Value         0.428571       0.93209    0.100000
+## Neg Pred Value         0.969241       0.18519    0.963448
+## Prevalence             0.032653       0.92993    0.037415
+## Detection Rate         0.002041       0.91497    0.001361
+## Detection Prevalence   0.004762       0.98163    0.013605
+## Balanced Accuracy      0.529844       0.51623    0.511821</code></pre>
+<p>This is the end of Assignment 3</p>
+<p>Ceni Babaoglu, PhD</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="/d2l/common/math/MathML.js?v=20.21.4.28830 "></script><script type="text/javascript">document.addEventListener('DOMContentLoaded', function() { D2LMathML.DesktopInit('https://s.brightspace.com/lib/mathjax/2.7.4/MathJax.js?config=MML_HTMLorMML','https://s.brightspace.com/lib/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML','130',false); });</script></body></html>
